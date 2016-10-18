@@ -1,13 +1,12 @@
 # Tutorial on Python Script and Rosbag Data Extraction
 
-
 ## Ros gotchas
 
 * This tutorial assumes ros is installed on your machine.
 
-* We get the definitions of our topics by using the following ros command for example: `rosbag info udacitiy_dataset_for_center_camera.bag`. Look through the list of topics and you should see a topic named `/left_camera/image_color/compressed` or `/left_camera/image_color` depending on which dataset you're using. See next point for more info.
+* We get the definitions for our topics by using the following ros command for example: `rosbag info udacitiy_dataset_for_center_camera.bag`. Look through the list of topics and you should see a topic named `/left_camera/image_color/compressed` or `/left_camera/image_color` depending on which dataset you're using. See next point for more info.
 
-* The camera images we not compressed the first time Udacity published the dataset.bag file. The newer datasets have compressed images so this script will use numpy to decompress the images: `cv_image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)`
+* The camera images were not compressed the first time Udacity published the dataset.bag file. The newer datasets have compressed images so this script will use numpy to decompress the images: `cv_image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)`
 
 * After the images are decompressed, we can use cv2 to write them to our output directory: `cv2.imwrite(image_filename, cv_image)`
 
@@ -30,3 +29,8 @@ For each bagfile, setup the output directories
 
 ## Step 3 Iterate through topics in each bagfile
 
+The script will check for 3 topic types, CAMERA_TOPICS, STEERING_TOPIC, and GPS_FIX_TOPIC. 
+
+For camera topics we just need to write the image to an output directory and headers to a csv. `write_image` will check if our images are compressed. If they are, then we use numpy to transform the format into an array that cv2 can use. Lastly, we use cv2 to write out the image, `cv2.imwrite(image_filename, cv_image)`
+
+The header information for steering angle and gps data is extracted similarly.
